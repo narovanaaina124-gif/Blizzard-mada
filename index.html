@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>❄️ BLIZZARD MADA · AVIATOR EXACT</title>
     <style>
-        * { m   argin: 0; padding: 0; box    -sizing: border-box; font-family: 'Inter', 'Courier New', monospace; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Courier New', monospace; }
         body { background: radial-gradient(circle at 20% 30%, #0a0f1e, #03050a); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 16px; }
         .blizzard-card { max-width: 820px; width: 100%; background: linear-gradient(165deg, #0b1a2c 0%, #0e1e32 100%); backdrop-filter: blur(8px); border: 2px solid rgba(0, 255, 255, 0.35); border-radius: 48px 48px 32px 32px; padding: 28px 24px; box-shadow: 0 25px 45px rgba(0, 180, 255, 0.25), 0 0 0 1px cyan inset; color: white; }
         .blizzard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; border-bottom: 1px solid #29e6ff70; padding-bottom: 18px; }
@@ -182,12 +182,11 @@
 
 <script>
     // ==========================================
-    // BLIZZARD AVIATOR - VERSION FINALE
-    // ✅ Premier HEX - Premier DEC = minutes à ajouter
-    // ✅ Farany 3 HEX = segondra raikitra (mod 60)
-    // ✅ Heure résultat + minutes = prédiction
-    // ✅ Crash identique
-    // ✅ Segondra miova arakaraky ny HEX
+    // BLIZZARD AVIATOR - VERSION CORRIGÉE
+    // ✅ Corrections appliquées :
+    //    - Espaces dans les sélecteurs CSS supprimés
+    //    - Gestion des valeurs négatives pour minutesToAdd
+    //    - Affichage correct des prédictions
     // ==========================================
 
     class AviatorPredictor {
@@ -203,7 +202,7 @@
             return parseInt(d[0], 10);
         }
         
-        // ✅ Minutes à ajouter = Premier HEX - Premier DEC
+        // ✅ Minutes à ajouter = Premier HEX - Premier DEC (avec gestion négative)
         getMinutesToAdd(hex, dec) {
             return this.getFirstHex(hex) - this.getFirstDec(dec);
         }
@@ -221,9 +220,15 @@
             return h.slice(-3) || '000';
         }
         
-        // Calculer heure prédiction
+        // Calculer heure prédiction (avec gestion des minutes négatives)
         calculatePrediction(lastHour, lastMinute, minutesToAdd) {
             let totalMinutes = lastHour * 60 + lastMinute + minutesToAdd;
+            
+            // Gestion des minutes négatives (on remonte dans le temps si nécessaire)
+            if (totalMinutes < 0) {
+                totalMinutes = 24 * 60 + (totalMinutes % (24 * 60));
+            }
+            
             let dayOffset = Math.floor(totalMinutes / 1440);
             totalMinutes = totalMinutes % 1440;
             let predHour = Math.floor(totalMinutes / 60);
